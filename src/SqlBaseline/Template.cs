@@ -33,7 +33,7 @@ GO
         SqlObject _sqlObject;
 
 
-        readonly Regex removeCreate = new Regex(@"^(CREATE)\s.*(PROCEDURE|VIEW|FUNCTION[\s\w\.])(.*)$", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+        readonly Regex removeCreate = new Regex(@"^(CREATE)\s.*(PROCEDURE |PROC |VIEW |FUNCTION [\s\w\.])(.*)$", RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
 
         public Template(SqlObject sqlObject)
