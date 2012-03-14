@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using SqlBaseline.SqlTypes;
-using Configuration = SqlBaseline.Configuration;
 
 namespace SqlBaseline
 {
@@ -19,7 +18,7 @@ namespace SqlBaseline
             _typesToFind = new List<IQueryBase>
                                                {
                                                    new ProcedureQuery(),
-//                                                   new FunctionQuery(),
+                                                   new FunctionQuery(),
                                                    new ViewQuery()
                                                };
 
@@ -83,7 +82,7 @@ namespace SqlBaseline
                         {
                             sqlObject.Code += reader[0].ToString();
                         }
-                        sqlObject.AddCodeTemplate(new Template(sqlObject));
+                        sqlObject.AddCodeTemplate();
                     }
                 }
             }           

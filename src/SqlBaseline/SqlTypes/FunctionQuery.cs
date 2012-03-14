@@ -16,5 +16,10 @@ namespace SqlBaseline.SqlTypes
         {
             get { return SqlType.Function; }
         }
+
+        public override ITemplate TemplateToUse(SqlObject sqlObject)
+        {
+            return new DropCreateTemplate(sqlObject);
+        }
     }
 }

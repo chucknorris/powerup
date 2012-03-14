@@ -44,6 +44,7 @@
     <Compile Include="Application.cs" />
     <Compile Include="Commandline.Options\Options.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="DropCreateTemplate.cs" />
     <Compile Include="FileWriter.cs" />
     <Compile Include="SqlTypes\FunctionQuery.cs" />
     <Compile Include="SqlTypes\IQueryBase.cs" />
@@ -53,9 +54,10 @@
     <Compile Include="SqlTypes\ProcedureQuery.cs" />
     <Compile Include="SqlTypes\SqlType.cs" />
     <Compile Include="SqlTypes\ViewQuery.cs" />
-    <Compile Include="Template.cs" />
+    <Compile Include="CreateAlterTemplate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TemplateBase.cs" />
     <Compile Include="WriteContext.cs" />
   </ItemGroup>
   <ItemGroup />

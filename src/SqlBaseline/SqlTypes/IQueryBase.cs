@@ -7,5 +7,6 @@
         string Database { get; }
         string Folder { get; }
         SqlObject MakeSqlObject(string dataBase, string schema, string name, int objectId);
+        ITemplate TemplateToUse(SqlObject sqlObject);
     }
 }

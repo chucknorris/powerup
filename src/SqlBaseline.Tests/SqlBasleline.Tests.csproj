@@ -50,8 +50,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuidlingTheListOfEntitiesToCreate.cs" />
+    <Compile Include="BuildTheDefaultRoundouseFolders.cs" />
+    <Compile Include="Build_the_default_file_structure.cs" />
+    <Compile Include="Create_a_script_for_each_entity.cs" />
+    <Compile Include="Find_all_the_entities_to_create.cs" />
     <Compile Include="TemplateTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Write_all_the_files.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

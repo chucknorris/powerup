@@ -29,6 +29,11 @@ namespace SqlBaseline.SqlTypes
         public string Database { get; private set; }
         public IList<SqlObject> SqlObjects { get; private set; }
         public abstract SqlType SqlType { get; }
+        
+        public virtual ITemplate TemplateToUse(SqlObject sqlObject)
+        {
+            return new CreateAlterTemplate(sqlObject);
+        }
 
         public void AddSqlObject(SqlObject sqlObject)
         {

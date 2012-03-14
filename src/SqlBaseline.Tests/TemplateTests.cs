@@ -15,7 +15,7 @@ namespace Sql.Extra.Tests
             var createText = "CREATE         PROCEDURE [dbo].[Procy]   ";
 
 
-            var sproc = new Template(new SqlObject(new ProcedureQuery(),"Hello"));
+            var sproc = new CreateAlterTemplate(new SqlObject(new ProcedureQuery(),"Hello"));
 
             sproc.AddText(createText);
             Assert.That(sproc.TemplatedProcedure(), Is.Not.StringContaining(createText));
@@ -26,7 +26,7 @@ namespace Sql.Extra.Tests
         {
             var createText = "CREATE    PROC [dbo].[aProceddure]";
 
-            var sproc = new Template((new SqlObject(new ProcedureQuery(), "Hello")));
+            var sproc = new CreateAlterTemplate((new SqlObject(new ProcedureQuery(), "Hello")));
 
             sproc.AddText(createText);
             Assert.That(sproc.TemplatedProcedure(), Is.Not.StringContaining(createText));
@@ -39,7 +39,7 @@ namespace Sql.Extra.Tests
         {
             var tableText = "CREATE TABLE #r";
 
-            var result = new Template(new SqlObject(new ProcedureQuery(), "Test"));
+            var result = new CreateAlterTemplate(new SqlObject(new ProcedureQuery(), "Test"));
             result.AddText(tableText);
             Assert.That(result.TemplatedProcedure(), Is.StringContaining(tableText));
         }

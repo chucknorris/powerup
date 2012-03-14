@@ -6,5 +6,6 @@ namespace SqlBaseline
         string FileName { get; }
         string Content { get; }
         string Type { get; }
+        void AddText(string text);
     }
 }

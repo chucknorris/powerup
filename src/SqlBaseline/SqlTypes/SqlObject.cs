@@ -6,10 +6,11 @@ namespace SqlBaseline.SqlTypes
         {
             this.parentQuery = parentQuery;
             this.Database = dataBase;
+
         }
 
         readonly IQueryBase parentQuery;
-        Template codeTemplate;
+        ITemplate codeTemplate;
 
         public string Schema { get; set; }
         public string Name { get; set; }
@@ -21,10 +22,9 @@ namespace SqlBaseline.SqlTypes
         public string Folder { get { return parentQuery.Folder; } }
         public string Database { get; private set; }
 
-
-        public void AddCodeTemplate(Template template)
+        public void AddCodeTemplate()
         {
-            codeTemplate = template;
+            codeTemplate = parentQuery.TemplateToUse(this);
             codeTemplate.AddText(Code);
         }
 

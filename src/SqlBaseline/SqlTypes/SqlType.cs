@@ -4,6 +4,7 @@ namespace SqlBaseline.SqlTypes
     {
         Procedure,
         View,
-        Function
+        Function,
+        Index
     }
 }
