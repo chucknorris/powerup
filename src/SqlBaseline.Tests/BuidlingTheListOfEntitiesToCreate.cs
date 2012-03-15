@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using SqlBaseline.SqlTypes;
+using SqlBaseline.SqlObjects;
+using SqlBaseline.SqlQueries;
 
-namespace Sql.Extra.Tests
+namespace SqlBaseline.Tests
 {
     [TestFixture]
     public class BuidlingTheListOfEntitiesToCreate

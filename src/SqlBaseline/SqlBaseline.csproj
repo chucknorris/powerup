@@ -44,21 +44,21 @@
     <Compile Include="Application.cs" />
     <Compile Include="Commandline.Options\Options.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="DropCreateTemplate.cs" />
-    <Compile Include="FileWriter.cs" />
-    <Compile Include="SqlTypes\FunctionQuery.cs" />
-    <Compile Include="SqlTypes\IQueryBase.cs" />
-    <Compile Include="ITemplate.cs" />
-    <Compile Include="SqlTypes\QueryBase.cs" />
-    <Compile Include="SqlTypes\SqlObject.cs" />
-    <Compile Include="SqlTypes\ProcedureQuery.cs" />
-    <Compile Include="SqlTypes\SqlType.cs" />
-    <Compile Include="SqlTypes\ViewQuery.cs" />
-    <Compile Include="CreateAlterTemplate.cs" />
+    <Compile Include="Output\FileWriter.cs" />
+    <Compile Include="Output\WriteContext.cs" />
+    <Compile Include="SqlObjects\SqlObject.cs" />
+    <Compile Include="SqlObjects\SqlType.cs" />
+    <Compile Include="SqlQueries\FunctionQuery.cs" />
+    <Compile Include="SqlQueries\IQueryBase.cs" />
+    <Compile Include="SqlQueries\QueryBase.cs" />
+    <Compile Include="SqlQueries\ProcedureQuery.cs" />
+    <Compile Include="SqlQueries\ViewQuery.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TemplateBase.cs" />
-    <Compile Include="WriteContext.cs" />
+    <Compile Include="Templates\CreateAlterTemplate.cs" />
+    <Compile Include="Templates\DropCreateTemplate.cs" />
+    <Compile Include="Templates\ITemplate.cs" />
+    <Compile Include="Templates\TemplateBase.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,7 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
 using SqlBaseline;
+using SqlBaseline.SqlObjects;
+using SqlBaseline.SqlQueries;
 using SqlBaseline.SqlTypes;
+using SqlBaseline.Templates;
 
 namespace Sql.Extra.Tests
 {

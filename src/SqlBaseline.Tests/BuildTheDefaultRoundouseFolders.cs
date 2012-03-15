@@ -1,7 +1,7 @@
 using NUnit.Framework;
-using SqlBaseline.SqlTypes;
+using SqlBaseline.SqlObjects;
 
-namespace Sql.Extra.Tests
+namespace SqlBaseline.Tests
 {
     [TestFixture]
     public class BuildTheDefaultRoundouseFolders

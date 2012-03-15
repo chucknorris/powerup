@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using SqlBaseline.SqlObjects;
+using SqlBaseline.SqlQueries;
 using SqlBaseline.SqlTypes;
 
 namespace SqlBaseline

@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Linq;
 using SqlBaseline.Commandline.Options;
+using SqlBaseline.Output;
 
 namespace SqlBaseline
 {
