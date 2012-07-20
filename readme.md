@@ -15,3 +15,5 @@ Notes
 The goal of SqlBaseline extract all the entities from a database ready for use with
 Roundhouse. These are the Anytime scripts and SqlBaseline will apply the second template
 described [here](https://github.com/chucknorris/roundhouse/wiki/Anytimescripts)
+
+For a walkthrough see this blog post http://keithbloom.blogspot.co.uk/2012/05/roundhouse-with-legacy-database.html
