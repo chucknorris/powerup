@@ -8,7 +8,7 @@ namespace SqlBaseline.SqlTypes
     {
         public override string NameSql
         {
-            get { return string.Format(nameSql, "in ('FN','TF')"); }
+            get { return string.Format(nameSql, "in ('FN','TF','IF')"); }
         }
 
         public override string Folder
