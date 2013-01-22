@@ -5,6 +5,8 @@ bin
 obj
 _ReSharper*
 
+[Pp]ackages
+
 *.suo
 *.user 
 *.csproj.user
