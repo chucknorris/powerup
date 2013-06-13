@@ -5,7 +5,7 @@ PoweruP is a tool to extract entities from SQL Server. It has been developed for
  
 Usage
 -----
-Run `PoweruP.exe` from the command prompt, passing in the SQL Severname, database name and
+Run `PoweruP.exe` from the command prompt, passing in the SQL Servername, database name and
 a path for the output file.
 
 		.\Powerup.exe -s:"(local)" -d:AdventureWorks -o:C:\Db\Adventure
