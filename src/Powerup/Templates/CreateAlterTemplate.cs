@@ -30,7 +30,7 @@ GO
 {2}
 ";
 
-        readonly Regex removeCreate = new Regex(@"^(CREATE)\s.*(PROCEDURE |PROC |VIEW [\s\w\.])(.*)$", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+        readonly Regex removeCreate = new Regex(@"^(CREATE)\s.*(PROCEDURE |PROC |VIEW )(.*)$", RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
         public CreateAlterTemplate(SqlObject sqlObject)
             : base(sqlObject)
