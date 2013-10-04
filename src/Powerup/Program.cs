@@ -50,16 +50,25 @@ namespace Powerup
         private static OptionSet ParseCommandLineOptions(Configuration configuration)
         {
             var optionSet = new OptionSet()
-                .Add("?|h|help", ShowHelp)
-                .Add("d=|database=",
-                     "Specify the name of a database to use.",
-                     o => configuration.DatabaseName = o)
-                .Add("s=|server=",
-                    "Specify the name of a server to use.",
-                    o => configuration.ServerName = o)
-                 .Add("o=|output=",
-                    "The location to write the generated files.",
-                    o => configuration.OutputFolder = o);
+                     .Add("?|h|help", ShowHelp)
+                     .Add("d=|database=",
+                          "Specify the name of a database to use.",
+                          o => configuration.ConnectionStringBuilder.InitialCatalog = o)
+                     .Add("s=|server=",
+                          "Specify the name of a server to use.",
+                          o => configuration.ConnectionStringBuilder.DataSource = o)
+                     .Add("o=|output=",
+                          "The location to write the generated files.",
+                          o => configuration.OutputFolder = o)
+                     .Add("t=|trusted=",
+                          "Whether connection uses integrated security or not.",
+                          o => configuration.ConnectionStringBuilder.IntegratedSecurity = bool.Parse(o))
+                     .Add("u=|username=",
+                          "Database username.",
+                          o => configuration.ConnectionStringBuilder.UserID = o)
+                     .Add("p=|password=",
+                          "Database password",
+                          o => configuration.ConnectionStringBuilder.Password = o);
             
             return optionSet;
         }

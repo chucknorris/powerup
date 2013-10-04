@@ -32,8 +32,8 @@ namespace Powerup
 
         public void BuildEntities()
         {
-            Console.WriteLine(conn.DatabaseConnection);
-            using (var con = new SqlConnection(conn.DatabaseConnection))
+            Console.WriteLine(conn.ConnectionStringBuilder.ConnectionString);
+            using (var con = conn.ConnectionStringBuilder.CreateConnection())
             {
                 con.Open();
                 foreach (var type in _typesToFind)
@@ -71,7 +71,7 @@ namespace Powerup
         {
             foreach (var sqlObject in _sqlObject)
             {
-                using (var con = new SqlConnection(conn.DatabaseConnection))
+                using (var con = conn.ConnectionStringBuilder.CreateConnection())
                 using (var cmd = new SqlCommand(sqlObject.Query, con))
                 {
                     cmd.Parameters.Add(new SqlParameter("@1", sqlObject.ObjectId));
