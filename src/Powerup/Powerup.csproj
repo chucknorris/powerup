@@ -44,6 +44,7 @@
     <Compile Include="Application.cs" />
     <Compile Include="Commandline.Options\Options.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Output\FileWriter.cs" />
     <Compile Include="Output\WriteContext.cs" />
     <Compile Include="SqlObjects\SqlObject.cs" />
