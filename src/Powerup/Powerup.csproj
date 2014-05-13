@@ -53,6 +53,7 @@
     <Compile Include="SqlQueries\IQueryBase.cs" />
     <Compile Include="SqlQueries\QueryBase.cs" />
     <Compile Include="SqlQueries\ProcedureQuery.cs" />
+    <Compile Include="SqlQueries\TableQuery.cs" />
     <Compile Include="SqlQueries\ViewQuery.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
