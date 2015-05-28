@@ -26,7 +26,7 @@ namespace Powerup.SqlQueries
         }
 
         public abstract string NameSql { get; }
-        public string TextSql { get { return textQuery; } }
+        public virtual string TextSql { get { return textQuery; } }
         public abstract string Folder { get; }
         public string Database { get; private set; }
         public IList<SqlObject> SqlObjects { get; private set; }
