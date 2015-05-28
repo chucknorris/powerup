@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Powerup.Templates;
 
 namespace Powerup.Output
@@ -36,12 +37,17 @@ namespace Powerup.Output
             Directory.CreateDirectory(outputPath);
         }
 
+        private static string CleanFileName(string fileName)
+        {
+            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c.ToString(), string.Empty));
+        }
+
         private void WriteFile()
         {
-            using (var sw = File.CreateText(Path.Combine(path, sqlArtifact.FolderName, sqlArtifact.FileName)))
+            using (var sw = File.CreateText(Path.Combine(path, sqlArtifact.FolderName, CleanFileName(sqlArtifact.FileName))))
             {
                 sw.Write(sqlArtifact.Content);
-                Console.WriteLine(string.Format("Creating file {0}\t\t[{1}]",sqlArtifact.FileName, sqlArtifact.Type));
+                Console.WriteLine("Creating file {0}\t\t[{1}]", sqlArtifact.FileName, sqlArtifact.Type);
             }
         } 
     }
