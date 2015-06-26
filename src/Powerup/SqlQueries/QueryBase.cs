@@ -4,6 +4,8 @@ using Powerup.Templates;
 
 namespace Powerup.SqlQueries
 {
+    using System.Data.SqlClient;
+
     public abstract class QueryBase : IQueryBase
     {
         protected QueryBase()
@@ -13,9 +15,10 @@ namespace Powerup.SqlQueries
 
         public abstract string NameSql { get; }
 
-        public abstract string TextSql { get; }
-
         public abstract string Folder { get; }
+
+        public abstract void AddCode(SqlConnection connection, SqlObject obj);
+
         public string Database { get; private set; }
         public IList<SqlObject> SqlObjects { get; private set; }
         public abstract SqlType SqlType { get; }
