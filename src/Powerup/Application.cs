@@ -18,9 +18,9 @@ namespace Powerup
             this.conn = conn;
             _typesToFind = new List<IQueryBase>
                                                {
-                                                   //new ProcedureQuery(),
-                                                   //new FunctionQuery(),
-                                                   //new ViewQuery(),
+                                                   new ProcedureQuery(),
+                                                   new FunctionQuery(),
+                                                   new ViewQuery(),
                                                    new IndexQuery()
                                                };
 
