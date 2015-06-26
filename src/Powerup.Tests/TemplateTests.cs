@@ -16,7 +16,19 @@ namespace Powerup.Tests
             var createText = "CREATE         PROCEDURE [dbo].[Procy]   ";
 
 
-            var sproc = new CreateAlterTemplate(new SqlObject(new ProcedureQuery(),"Hello"));
+            var sproc = new CreateAlterTemplate(new SqlObject(new ProcedureQuery(), "Hello"));
+
+            sproc.AddText(createText);
+            Assert.That(sproc.TemplatedProcedure(), Is.Not.StringContaining(createText));
+        }
+
+        [Test]
+        public void should_template_my_sproc_with_leading_white_spaces()
+        {
+            var createText = "  \t \t CREATE         PROCEDURE [dbo].[Procy]   ";
+
+
+            var sproc = new CreateAlterTemplate(new SqlObject(new ProcedureQuery(), "Hello"));
 
             sproc.AddText(createText);
             Assert.That(sproc.TemplatedProcedure(), Is.Not.StringContaining(createText));
