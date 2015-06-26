@@ -2,7 +2,7 @@ using Powerup.SqlObjects;
 
 namespace Powerup.SqlQueries
 {
-    public class ViewQuery : QueryBase
+    public class ViewQuery : SysObjectQueryBase
     {
         public override string NameSql
         {

@@ -3,7 +3,7 @@ using Powerup.Templates;
 
 namespace Powerup.SqlQueries
 {
-    public class FunctionQuery : QueryBase
+    public class FunctionQuery : SysObjectQueryBase
     {
         public override string NameSql
         {
