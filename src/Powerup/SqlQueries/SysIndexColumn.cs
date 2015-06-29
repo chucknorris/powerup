@@ -6,6 +6,8 @@
 
         public string Name { get; set; }
 
+        public bool IsDescending { get; set; }
+
         public override sealed string ToString()
         {
             return this.Name ?? base.ToString();

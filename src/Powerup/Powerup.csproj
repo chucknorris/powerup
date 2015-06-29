@@ -54,7 +54,7 @@
     <Compile Include="SqlQueries\IQueryBase.cs" />
     <Compile Include="SqlQueries\QueryBase.cs" />
     <Compile Include="SqlQueries\ProcedureQuery.cs" />
-    <Compile Include="SqlQueries\SysColumn.cs" />
+    <Compile Include="SqlQueries\SysIndexColumn.cs" />
     <Compile Include="SqlQueries\SysIndex.cs" />
     <Compile Include="SqlQueries\SysObjectQueryBase.cs" />
     <Compile Include="SqlQueries\SysTable.cs" />

@@ -31,6 +31,7 @@
 ,ic.index_column_id AS ColumnId
 ,ind.is_unique AS IsUnique
 ,ind.type_desc as Type
+,ic.is_descending_key AS IsDescending
 FROM sys.indexes ind 
 JOIN sys.index_columns ic ON  ind.object_id = ic.object_id and ind.index_id = ic.index_id 
 JOIN sys.columns col ON ic.object_id = col.object_id and ic.column_id = col.column_id 
@@ -93,7 +94,16 @@ ORDER BY TableName
                     buffer.AppendFormat(" {0} INDEX [{1}]", index.Type, index.Name);
                     buffer.AppendLine();
                     buffer.AppendFormat("ON [{0}].[{1}]", index.Table.Schema, index.Table.Name);
-                    buffer.AppendFormat("({0})", string.Join(", ", index.Columns.Select(c => c.Name)));
+                    buffer.AppendFormat("({0})", string.Join(", ", index.Columns.Select(
+                        c =>
+                        {
+                            if (c.IsDescending)
+                            {
+                                return c.Name + " DESC";
+                            }
+
+                            return c.Name;
+                        })));
                     obj.Code += buffer.ToString();
                     obj.AddCodeTemplate();
                 }
