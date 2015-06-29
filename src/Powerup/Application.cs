@@ -78,7 +78,11 @@ namespace Powerup
                     con.Open();
                     using (var reader = cmd.ExecuteReader())
                     {
-                        if (!reader.HasRows) return;
+                        if (!reader.HasRows)
+                        {
+                            continue;
+                        }
+
                         while (reader.Read())
                         {
                             sqlObject.Code += reader[0].ToString();
