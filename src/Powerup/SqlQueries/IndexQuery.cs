@@ -37,7 +37,7 @@ JOIN sys.columns col ON ic.object_id = col.object_id and ic.column_id = col.colu
 JOIN sys.tables t ON ind.object_id = t.object_id 
 JOIN sys.schemas s ON t.schema_id = s.schema_id
 WHERE ind.name = @NAME
-  AND ind.index_id = @ID
+  AND ind.object_id = @ID
 ORDER BY TableName
 ,IndexId
 ,ColumnId", connection))
@@ -76,21 +76,24 @@ ORDER BY TableName
                         });
                     }
                     var buffer = new StringBuilder();
+                    buffer.AppendFormat(
+                        @"IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[{0}].[{1}]') AND UPPER(name) = UPPER(N'{2}'))
+    DROP INDEX [{2}] ON [{0}].[{1}]",
+                        index.Table.Schema,
+                        index.Table.Name,
+                        index.Name);
+                    buffer.AppendLine();
+                    buffer.AppendLine("GO");
                     buffer.Append(@"CREATE");
                     if (index.IsUnique)
                     {
                         buffer.Append(" UNIQUE");
                     }
 
-                    buffer.AppendFormat(" {0} INDEX", index.Type);
-                    buffer.Append(" ");
-                    buffer.AppendLine(index.Name);
-                    buffer.AppendLine("ON");
-                    buffer.AppendFormat("[{0}].[{1}]", index.Table.Schema, index.Table.Name);
-                    buffer.AppendFormat("({0})", string.Join(", ", index.Columns.Select(c => c.Name)));
+                    buffer.AppendFormat(" {0} INDEX [{1}]", index.Type, index.Name);
                     buffer.AppendLine();
-                    buffer.AppendLine("WITH");
-                    buffer.AppendLine("(DROP_EXISTING = ON);");
+                    buffer.AppendFormat("ON [{0}].[{1}]", index.Table.Schema, index.Table.Name);
+                    buffer.AppendFormat("({0})", string.Join(", ", index.Columns.Select(c => c.Name)));
                     obj.Code += buffer.ToString();
                     obj.AddCodeTemplate();
                 }
@@ -103,7 +106,7 @@ ORDER BY TableName
             {
                 return @"SELECT DISTINCT ind.name AS IndexName
 ,s.name AS SchemaName
-,ind.index_id AS IndexId
+,ind.object_id AS ObjectId
 FROM sys.indexes ind
 JOIN sys.tables t ON ind.object_id = t.object_id 
 JOIN sys.schemas s ON t.schema_id = s.schema_id
