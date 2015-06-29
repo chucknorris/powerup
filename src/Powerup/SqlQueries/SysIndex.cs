@@ -21,6 +21,11 @@
 
         public bool IsUnique { get; set; }
 
+        public bool HasFilter { get; set; }
+
+        public string FilterDefinition { get; set; }
+
+
         public override sealed string ToString()
         {
             return this.Name ?? base.ToString();

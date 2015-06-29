@@ -31,6 +31,8 @@
 ,ic.index_column_id AS ColumnId
 ,ind.is_unique AS IsUnique
 ,ind.type_desc as Type
+,ind.has_filter AS HasFilter
+,ind.filter_definition AS FilterDefinition
 ,ic.is_descending_key AS IsDescending
 ,ic.is_included_column AS IsIncluded
 FROM sys.indexes ind 
@@ -67,7 +69,9 @@ ORDER BY TableName
                                 Name = reader[1].ToString(),
                                 Table = tbl,
                                 Type = reader[7].ToString(),
-                                IsUnique = Convert.ToBoolean(reader[6])
+                                IsUnique = Convert.ToBoolean(reader[6]),
+                                HasFilter = Convert.ToBoolean(reader[7]),
+                                FilterDefinition = Convert.ToString(reader[8])
                             };
                         }
 
@@ -75,8 +79,8 @@ ORDER BY TableName
                         {
                             Id = Convert.ToInt32(reader[5]),
                             Name = Convert.ToString(reader[2]),
-                            IsDescending = Convert.ToBoolean(reader[8]),
-                            IsIncluded = Convert.ToBoolean(reader[9])
+                            IsDescending = Convert.ToBoolean(reader[10]),
+                            IsIncluded = Convert.ToBoolean(reader[11]),
                         });
                     }
                     var buffer = new StringBuilder();
@@ -114,10 +118,16 @@ ORDER BY TableName
 
                             return c.Name;
                         })));
-                    buffer.AppendLine();
                     if (index.Columns.Any(c => c.IsIncluded))
                     {
+                        buffer.AppendLine();
                         buffer.AppendFormat("INCLUDE ({0})", string.Join(", ", index.Columns.Where(c => c.IsIncluded).Select(c => c.Name)));
+                    }
+
+                    if (index.HasFilter)
+                    {
+                        buffer.AppendLine();
+                        buffer.AppendFormat("WHERE {0}", index.FilterDefinition);
                     }
 
                     obj.Code += buffer.ToString();
