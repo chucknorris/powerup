@@ -1,6 +1,6 @@
 ﻿namespace Powerup.SqlQueries
 {
-    public class SysColumn
+    public class SysIndexColumn
     {
         public int Id { get; set; }
 

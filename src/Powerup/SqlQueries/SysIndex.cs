@@ -6,10 +6,10 @@
     {
         public SysIndex()
         {
-            this.Columns = new List<SysColumn>();
+            this.Columns = new List<SysIndexColumn>();
         }
 
-        public IList<SysColumn> Columns { get; }
+        public IList<SysIndexColumn> Columns { get; }
 
         public SysTable Table { get; set; }
 

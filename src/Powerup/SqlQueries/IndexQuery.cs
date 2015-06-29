@@ -69,7 +69,7 @@ ORDER BY TableName
                             };
                         }
 
-                        index.Columns.Add(new SysColumn
+                        index.Columns.Add(new SysIndexColumn
                         {
                             Id = Convert.ToInt32(reader[5]),
                             Name = Convert.ToString(reader[2])
