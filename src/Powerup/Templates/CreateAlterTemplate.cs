@@ -19,7 +19,7 @@ namespace Powerup.Templates
 SELECT @Name = N'{0}', @Type = N'{1}', @Schema = N'{2}'
 
 IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID('[' + @Schema + '].[' + @Name + ']'))
-    EXECUTE('CREATE ' + @Type + ' [' + @Schema + '].[' + @Name + '] AS SELECT * FROM sys.objects'
+    EXECUTE('CREATE ' + @Type + ' [' + @Schema + '].[' + @Name + '] AS SELECT * FROM sys.objects')
 
 PRINT 'Creating/Updating ' + @Type + ' [' + @Schema + '].[' + @Name + ']'
 GO
