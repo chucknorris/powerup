@@ -32,6 +32,7 @@
 ,ind.is_unique AS IsUnique
 ,ind.type_desc as Type
 ,ic.is_descending_key AS IsDescending
+,ic.is_included_column AS IsIncluded
 FROM sys.indexes ind 
 JOIN sys.index_columns ic ON  ind.object_id = ic.object_id and ind.index_id = ic.index_id 
 JOIN sys.columns col ON ic.object_id = col.object_id and ic.column_id = col.column_id 
@@ -73,7 +74,8 @@ ORDER BY TableName
                         index.Columns.Add(new SysIndexColumn
                         {
                             Id = Convert.ToInt32(reader[5]),
-                            Name = Convert.ToString(reader[2])
+                            Name = Convert.ToString(reader[2]),
+                            IsDescending = Convert.ToBoolean(reader[8])
                         });
                     }
                     var buffer = new StringBuilder();
