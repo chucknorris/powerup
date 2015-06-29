@@ -70,8 +70,8 @@ ORDER BY TableName
                                 Table = tbl,
                                 Type = reader[7].ToString(),
                                 IsUnique = Convert.ToBoolean(reader[6]),
-                                HasFilter = Convert.ToBoolean(reader[7]),
-                                FilterDefinition = Convert.ToString(reader[8])
+                                HasFilter = Convert.ToBoolean(reader[8]),
+                                FilterDefinition = Convert.ToString(reader[9])
                             };
                         }
 
