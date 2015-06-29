@@ -77,14 +77,21 @@ ORDER BY TableName
                         });
                     }
                     var buffer = new StringBuilder();
+                    buffer.AppendLine(@"DECLARE @Name nvarchar(128), @TableName nvarchar(128), @TableSchema nvarchar(128)");
                     buffer.AppendFormat(
-                        @"IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[{0}].[{1}]') AND UPPER(name) = UPPER(N'{2}'))
-    DROP INDEX [{2}] ON [{0}].[{1}]",
-                        index.Table.Schema,
+                        @"SELECT @Name = N'{0}', @TableName=N'{1}', @TableSchema = N'{2}'",
+                        index.Name,
                         index.Table.Name,
-                        index.Name);
+                        index.Table.Schema);
                     buffer.AppendLine();
+                    buffer.AppendLine(
+                        "IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID('[' + @TableSchema + '].[' + @TableName + ']') AND UPPER(name) = UPPER(@Name))");
+                    buffer.AppendLine(
+                        "    EXECUTE('DROP INDEX [' + @Name + '] ON [' + @TableSchema + '].[' + @TableName + ']')");
+                    buffer.AppendLine();
+                    buffer.AppendLine(@"PRINT 'Creating index [' + @Name + '] on table [' + @TableSchema + '].[' + @TableName + ']'");
                     buffer.AppendLine("GO");
+                    buffer.AppendLine();
                     buffer.Append(@"CREATE");
                     if (index.IsUnique)
                     {
