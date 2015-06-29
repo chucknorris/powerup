@@ -75,7 +75,8 @@ ORDER BY TableName
                         {
                             Id = Convert.ToInt32(reader[5]),
                             Name = Convert.ToString(reader[2]),
-                            IsDescending = Convert.ToBoolean(reader[8])
+                            IsDescending = Convert.ToBoolean(reader[8]),
+                            IsIncluded = Convert.ToBoolean(reader[9])
                         });
                     }
                     var buffer = new StringBuilder();
@@ -103,7 +104,7 @@ ORDER BY TableName
                     buffer.AppendFormat(" {0} INDEX [{1}]", index.Type, index.Name);
                     buffer.AppendLine();
                     buffer.AppendFormat("ON [{0}].[{1}]", index.Table.Schema, index.Table.Name);
-                    buffer.AppendFormat("({0})", string.Join(", ", index.Columns.Select(
+                    buffer.AppendFormat("({0})", string.Join(", ", index.Columns.Where(c => !c.IsIncluded).Select(
                         c =>
                         {
                             if (c.IsDescending)
@@ -113,6 +114,12 @@ ORDER BY TableName
 
                             return c.Name;
                         })));
+                    buffer.AppendLine();
+                    if (index.Columns.Any(c => c.IsIncluded))
+                    {
+                        buffer.AppendFormat("INCLUDE ({0})", string.Join(", ", index.Columns.Where(c => c.IsIncluded).Select(c => c.Name)));
+                    }
+
                     obj.Code += buffer.ToString();
                     obj.AddCodeTemplate();
                 }

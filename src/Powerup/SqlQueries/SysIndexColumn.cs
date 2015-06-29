@@ -8,6 +8,8 @@
 
         public bool IsDescending { get; set; }
 
+        public bool IsIncluded { get; set; }
+
         public override sealed string ToString()
         {
             return this.Name ?? base.ToString();
