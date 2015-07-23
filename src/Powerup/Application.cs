@@ -20,7 +20,8 @@ namespace Powerup
                                                {
                                                    new ProcedureQuery(),
                                                    new FunctionQuery(),
-                                                   new ViewQuery()
+                                                   new ViewQuery(),
+                                                   new IndexQuery()
                                                };
 
         }
@@ -48,7 +49,7 @@ namespace Powerup
                                 _sqlObject.Add(type.MakeSqlObject(con.Database,
                                                                   reader[1].ToString(),
                                                                   reader[0].ToString(),
-                                                                  (int) reader[2]));
+                                                                  (int)reader[2]));
                             }
                         }
                     }
@@ -59,35 +60,19 @@ namespace Powerup
 
         public void AddCodeToEntities()
         {
-            AddCodeToObject();
+            using (var con = this.conn.ConnectionStringBuilder.CreateConnection())
+            {
+                con.Open();
+                foreach (var obj in this._sqlObject)
+                {
+                    obj.ParentQuery.AddCode(con, obj);
+                }
+            }
         }
 
         public void WriteOutPut()
         {
-            
-        }
 
-        private void AddCodeToObject()
-        {
-            foreach (var sqlObject in _sqlObject)
-            {
-                using (var con = conn.ConnectionStringBuilder.CreateConnection())
-                using (var cmd = new SqlCommand(sqlObject.Query, con))
-                {
-                    cmd.Parameters.Add(new SqlParameter("@1", sqlObject.ObjectId));
-                    con.Open();
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        if (!reader.HasRows) return;
-                        while (reader.Read())
-                        {
-                            sqlObject.Code += reader[0].ToString();
-                        }
-                        sqlObject.AddCodeTemplate();
-                    }
-                }
-            }           
         }
-
     }
 }

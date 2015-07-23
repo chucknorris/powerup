@@ -50,14 +50,20 @@
     <Compile Include="SqlObjects\SqlObject.cs" />
     <Compile Include="SqlObjects\SqlType.cs" />
     <Compile Include="SqlQueries\FunctionQuery.cs" />
+    <Compile Include="SqlQueries\IndexQuery.cs" />
     <Compile Include="SqlQueries\IQueryBase.cs" />
     <Compile Include="SqlQueries\QueryBase.cs" />
     <Compile Include="SqlQueries\ProcedureQuery.cs" />
+    <Compile Include="SqlQueries\SysIndexColumn.cs" />
+    <Compile Include="SqlQueries\SysIndex.cs" />
+    <Compile Include="SqlQueries\SysObjectQueryBase.cs" />
+    <Compile Include="SqlQueries\SysTable.cs" />
     <Compile Include="SqlQueries\ViewQuery.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\CreateAlterTemplate.cs" />
     <Compile Include="Templates\DropCreateTemplate.cs" />
+    <Compile Include="Templates\VoidTemplate.cs" />
     <Compile Include="Templates\ITemplate.cs" />
     <Compile Include="Templates\TemplateBase.cs" />
   </ItemGroup>

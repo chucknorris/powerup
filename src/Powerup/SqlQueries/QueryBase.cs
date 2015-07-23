@@ -4,38 +4,26 @@ using Powerup.Templates;
 
 namespace Powerup.SqlQueries
 {
+    using System.Data.SqlClient;
+
     public abstract class QueryBase : IQueryBase
     {
-        protected string nameSql =
-            @"SELECT  o.name Name, s.name [Schema], o.object_id
-                FROM    sys.objects o
-                INNER JOIN sys.schemas s 
-	                ON o.schema_id = s.schema_id
-                where o.type {0}
-	                and o.name not like 'dt_%'
-                order by o.object_id";
-
-        string textQuery = @"SELECT c.text
-                FROM SYS.syscomments c
-                where c.id = @1
-                order by c.colid";
-
         protected QueryBase()
         {
             SqlObjects = new List<SqlObject>();
         }
 
         public abstract string NameSql { get; }
-        public string TextSql { get { return textQuery; } }
+
         public abstract string Folder { get; }
+
+        public abstract void AddCode(SqlConnection connection, SqlObject obj);
+
         public string Database { get; private set; }
         public IList<SqlObject> SqlObjects { get; private set; }
         public abstract SqlType SqlType { get; }
-        
-        public virtual ITemplate TemplateToUse(SqlObject sqlObject)
-        {
-            return new CreateAlterTemplate(sqlObject);
-        }
+
+        public abstract ITemplate TemplateToUse(SqlObject sqlObject);
 
         public void AddSqlObject(SqlObject sqlObject)
         {

@@ -20,10 +20,17 @@ namespace Powerup.SqlObjects
         public int ObjectId { get; set; }
         public SqlType SqlType { get; set; }
         public string Code { get; set; }
-        public string Query { get { return parentQuery.TextSql; } }
         public ITemplate ThingToTemplate { get { return codeTemplate; } }
         public string Folder { get { return parentQuery.Folder; } }
         public string Database { get; private set; }
+
+        public IQueryBase ParentQuery
+        {
+            get
+            {
+                return this.parentQuery;
+            }
+        }
 
         public void AddCodeTemplate()
         {
