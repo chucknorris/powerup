@@ -1,7 +1,9 @@
 ﻿using DatabaseSchemaReader.DataSchema;
 using HandlebarsDotNet;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Powerup.SqlGen.MySql
 {
@@ -10,8 +12,8 @@ namespace Powerup.SqlGen.MySql
         private const string codeTemplate = @"DROP PROCEDURE IF EXISTS {{obj.Name}};
 DELIMITER $$
 CREATE PROCEDURE {{obj.Name}} (
-{{#each obj.Arguments}}
-    {{in_out}}{{Name}} {{data_type}},
+{{#each args}}
+    {{in_out}}{{Name}} {{data_type}}{{#unless @last}},{{/unless}}
 {{/each}}
 ) {{returns}}
 {{obj.Sql}}$$
@@ -24,17 +26,12 @@ DELIMITER ;";
             Handlebars.RegisterHelper((string)"in_out", (HandlebarsHelper)InOutFunction);
             Handlebars.RegisterHelper((string)"returns", (HandlebarsHelper)ReturnsFunction);
             Handlebars.RegisterHelper((string)"data_type", (HandlebarsHelper)DataTypeFunction);
+            Handlebars.Configuration.TextEncoder = new TextEncoder();
             template = Handlebars.Compile(codeTemplate.Replace("PROCEDURE", objType));
         }
 
-        private static void InOutFunction(TextWriter writer, dynamic context, object[] parameters)
+        protected virtual void InOutFunction(TextWriter writer, dynamic context, object[] parameters)
         {
-            if (context.In && context.Out)
-                writer.WriteSafeString("INOUT ");
-            else if (context.In)
-                writer.WriteSafeString("IN ");
-            else if (context.Out)
-                writer.WriteSafeString("OUT ");
         }
 
         private static void DataTypeFunction(TextWriter writer, dynamic context, object[] parameters)
@@ -54,7 +51,8 @@ DELIMITER ;";
         protected string InnerWriteSql(dynamic obj)
         {
             obj.Arguments.Sort((Comparison<DatabaseArgument>)CompareByOrdinal);
-            var result = template(new { obj = obj });
+            var args = ((List<DatabaseArgument>)obj.Arguments).Where(arg => arg.Name != null);
+            var result = template(new { obj = obj, args = args });
             return result;
         }
 

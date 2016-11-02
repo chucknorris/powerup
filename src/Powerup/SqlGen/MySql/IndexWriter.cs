@@ -23,6 +23,7 @@ CREATE INDEX {{index.Name}} ON {{index.TableName}}(
 
         static IndexWriter()
         {
+            Handlebars.Configuration.TextEncoder = new TextEncoder();
             template = Handlebars.Compile(codeTemplate);
         }
 

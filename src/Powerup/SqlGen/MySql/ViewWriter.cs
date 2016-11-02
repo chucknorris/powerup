@@ -18,6 +18,7 @@ CREATE VIEW {{view.Name}} AS
 
         static ViewWriter()
         {
+            Handlebars.Configuration.TextEncoder = new TextEncoder();
             template = Handlebars.Compile(codeTemplate);
         }
 

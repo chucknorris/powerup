@@ -76,6 +76,7 @@
     <Compile Include="SqlGen\MySql\ViewWriter.cs" />
     <Compile Include="SqlGen\SqlGeneratorFactory.cs" />
     <Compile Include="SqlGen\TemplateWorkaround.cs" />
+    <Compile Include="SqlGen\TextEncoder.cs" />
     <Compile Include="SqlObjects\SqlObject.cs" />
     <Compile Include="SqlObjects\SqlType.cs" />
     <Compile Include="SqlQueries\FunctionQuery.cs" />

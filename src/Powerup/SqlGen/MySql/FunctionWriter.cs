@@ -17,8 +17,16 @@ namespace Powerup.SqlGen.MySql
 
         protected override void ReturnsFunction(TextWriter writer, dynamic context, object[] arguments)
         {
-            if (context.obj.ReturnType != null)
-                writer.WriteSafeString($"returns {context.obj.ReturnType}");
+            var func = context.obj as DatabaseFunction;
+            if (func.ReturnType != null)
+            {
+                writer.Write("RETURNS ");
+                var returnArg = func.Arguments.FirstOrDefault(arg => arg.Name == null && arg.DatabaseDataType == func.ReturnType);
+                if (returnArg != null)
+                    DataTypeWriter.Write(writer, returnArg);
+                else
+                    writer.WriteSafeString(func.ReturnType);
+            }
         }
     }
 }
