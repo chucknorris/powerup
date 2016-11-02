@@ -7,6 +7,7 @@ using Powerup.SqlQueries;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace Powerup
 {
@@ -88,7 +89,8 @@ namespace Powerup
         {
             IQueryBase type = new ProcedureQuery();
             var writer = configuration.SqlGenerator.StoredProcedureSqlWriter;
-            foreach (var obj in schema.StoredProcedures)
+            var databaseStoredProcedures = schema.StoredProcedures.Where(obj => obj.SchemaOwner == configuration.InitialCatalog);
+            foreach (var obj in databaseStoredProcedures)
             {
                 var sqlObject = type.MakeSqlObject(configuration.InitialCatalog, schema.Owner, obj.Name, 0);
                 sqlObject.Code = writer.WriteSql(obj);
@@ -101,7 +103,8 @@ namespace Powerup
         {
             IQueryBase type = new FunctionQuery();
             var writer = configuration.SqlGenerator.FunctionSqlWriter;
-            foreach (var obj in schema.Functions)
+            var databaseFunctions = schema.Functions.Where(obj => obj.SchemaOwner == configuration.InitialCatalog);
+            foreach (var obj in databaseFunctions)
             {
                 var sqlObject = type.MakeSqlObject(configuration.InitialCatalog, schema.Owner, obj.Name, 0);
                 sqlObject.Code = writer.WriteSql(obj);
@@ -114,7 +117,8 @@ namespace Powerup
         {
             IQueryBase type = new ViewQuery();
             var writer = configuration.SqlGenerator.ViewSqlWriter;
-            foreach (var obj in schema.Views)
+            var databaseViews = schema.Views.Where(obj => obj.SchemaOwner == configuration.InitialCatalog);
+            foreach (var obj in databaseViews)
             {
                 var sqlObject = type.MakeSqlObject(configuration.InitialCatalog, schema.Owner, obj.Name, 0);
                 sqlObject.Code = writer.WriteSql(obj);
@@ -127,9 +131,10 @@ namespace Powerup
         {
             var type = new IndexQuery();
             var writer = configuration.SqlGenerator.IndexSqlWriter;
-            foreach (var table in schema.Tables)
+            var databaseTables = schema.Tables.Where(obj => obj.SchemaOwner == configuration.InitialCatalog);
+            foreach (var table in databaseTables)
             {
-                foreach (var index in table.Indexes)
+                foreach (var index in table.Indexes.Where(ix => ix.Name != "PRIMARY" && !ix.Name.ToLowerInvariant().Contains("fk_")))
                 {
                     var sqlObject = type.MakeSqlObject(configuration.InitialCatalog, schema.Owner, index.Name, 0);
                     sqlObject.Code = writer.WriteSql(index);

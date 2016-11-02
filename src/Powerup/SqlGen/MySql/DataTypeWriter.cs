@@ -7,7 +7,7 @@ namespace Powerup.SqlGen.MySql
     {
         internal static void Write(TextWriter writer, DatabaseArgument arg)
         {
-            writer.Write(arg.DatabaseDataType);
+            writer.Write(arg.DatabaseDataType.ToUpperInvariant());
             if (arg.Scale != null && arg.Scale != 0)
                 writer.Write($"({arg.Precision}, {arg.Scale})");
             else if (arg.Length != null && !arg.DatabaseDataType.ToLowerInvariant().Contains("text") &&

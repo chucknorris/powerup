@@ -12,12 +12,27 @@ namespace Powerup.SqlGen.MySql
     {
         private static readonly Func<object, string> template;
 
-        private const string codeTemplate = @"IF (SELECT 1 = 1 FROM INFORMATION_SCHEMA.STATISTICS
-WHERE table_schema='{{table.DatabaseSchema}}' AND table_name='{{index.TableName}}' AND index_name='{{index.Name}}')
-    DROP INDEX {{index.Name}} ON {{index.TableName}};
-CREATE INDEX {{index.Name}} ON {{index.TableName}}(
+        private const string codeTemplate = @"
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS powerup_drop_index_if_exists $$
+CREATE PROCEDURE powerup_drop_index_if_exists(in tableschema varchar(128), in theTable varchar(128), in theIndexName varchar(128) )
+BEGIN
+ IF((SELECT COUNT(*) AS index_exists FROM information_schema.statistics WHERE TABLE_SCHEMA = tableschema and table_name =
+theTable AND index_name = theIndexName) > 0) THEN
+   SET @s = CONCAT('DROP INDEX ' , theIndexName , ' ON ' , theTable);
+   PREPARE stmt FROM @s;
+   EXECUTE stmt;
+ END IF;
+END $$
+CALL powerup_drop_index_if_exists('{{index.SchemaOwner}}', '{{index.TableName}}', '{{index.Name}}') $$
+
+DROP PROCEDURE IF EXISTS powerup_drop_index_if_exists $$
+DELIMITER ;
+
+CREATE {{#if index.IsUnique}}UNIQUE {{/if}}INDEX {{index.Name}} ON {{index.TableName}}(
 {{#each index.Columns}}
-    {{Name}},
+    {{Name}}{{#unless @last}},{{/unless}}
 {{/each}}
 );";
 
@@ -29,7 +44,7 @@ CREATE INDEX {{index.Name}} ON {{index.TableName}}(
 
         public string WriteSql(DatabaseIndex obj)
         {
-            var data = new { table = obj.Columns[0].Table, index = obj };
+            var data = new { index = obj };
             var result = template(data);
             return result;
         }
