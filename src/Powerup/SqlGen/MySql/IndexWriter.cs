@@ -37,7 +37,8 @@ CREATE {{index_type}}INDEX {{index.Name}} ON {{index.TableName}}(
 {{#each index.Columns}}
     {{Name}}{{#unless @last}},{{/unless}}
 {{/each}}
-);";
+);
+";
 
         static IndexWriter()
         {
