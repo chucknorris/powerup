@@ -1,4 +1,5 @@
-﻿using Powerup.SqlQueries;
+﻿using Powerup.SqlGen;
+using Powerup.SqlQueries;
 using Powerup.Templates;
 
 namespace Powerup.SqlObjects
@@ -9,11 +10,10 @@ namespace Powerup.SqlObjects
         {
             this.parentQuery = parentQuery;
             this.Database = dataBase;
-
         }
 
-        readonly IQueryBase parentQuery;
-        ITemplate codeTemplate;
+        private readonly IQueryBase parentQuery;
+        private ITemplate codeTemplate;
 
         public string Schema { get; set; }
         public string Name { get; set; }
@@ -46,6 +46,11 @@ namespace Powerup.SqlObjects
         public override string ToString()
         {
             return FullName();
+        }
+
+        public void SetTemplateWorkaround(ITemplate template)
+        {
+            codeTemplate = template;
         }
     }
 }

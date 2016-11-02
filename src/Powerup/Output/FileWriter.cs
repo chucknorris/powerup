@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Powerup.Templates;
+using System;
 using System.IO;
 using System.Linq;
-using Powerup.Templates;
 
 namespace Powerup.Output
 {
@@ -28,9 +28,7 @@ namespace Powerup.Output
             var outputPath = Path.Combine(path, sqlArtifact.FolderName);
             if (Directory.Exists(outputPath))
             {
-
                 return;
-
             }
 
             Console.WriteLine("** Creating directory {0} **", outputPath);
@@ -49,6 +47,6 @@ namespace Powerup.Output
                 sw.Write(sqlArtifact.Content);
                 Console.WriteLine("Creating file {0}\t\t[{1}]", sqlArtifact.FileName, sqlArtifact.Type);
             }
-        } 
+        }
     }
 }
