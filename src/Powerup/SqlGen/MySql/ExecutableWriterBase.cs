@@ -11,13 +11,15 @@ namespace Powerup.SqlGen.MySql
     {
         private const string codeTemplate = @"DROP PROCEDURE IF EXISTS {{obj.Name}};
 DELIMITER $$
+;
 CREATE PROCEDURE {{obj.Name}} (
 {{#each args}}
     {{in_out}}{{Name}} {{data_type}}{{#unless @last}},{{/unless}}
 {{/each}}
 ) {{returns}}
 {{obj.Sql}}$$
-DELIMITER ;";
+DELIMITER ;
+;";
 
         private Func<object, string> template = null;
 
