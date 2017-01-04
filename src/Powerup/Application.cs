@@ -21,7 +21,8 @@ namespace Powerup
                                                    new ProcedureQuery(),
                                                    new FunctionQuery(),
                                                    new ViewQuery(),
-                                                   new IndexQuery()
+                                                   new IndexQuery(),
+                                                   new SequenceQuery()
                                                };
 
         }
