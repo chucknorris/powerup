@@ -5,6 +5,7 @@
         Procedure,
         View,
         Function,
-        Index
+        Index,
+        Sequence
     }
 }
