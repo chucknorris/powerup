@@ -1,14 +1,16 @@
-﻿namespace Powerup.SqlQueries
+﻿using DatabaseSchemaReader.DataSchema;
+using HandlebarsDotNet;
+
+namespace Powerup.SqlQueries
 {
+    using Powerup.SqlObjects;
+    using Powerup.Templates;
     using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlClient;
     using System.Linq;
     using System.Text;
-
-    using Powerup.SqlObjects;
-    using Powerup.Templates;
 
     public class IndexQuery : QueryBase
     {
@@ -35,10 +37,10 @@
 ,ind.filter_definition AS FilterDefinition
 ,ic.is_descending_key AS IsDescending
 ,ic.is_included_column AS IsIncluded
-FROM sys.indexes ind 
-JOIN sys.index_columns ic ON  ind.object_id = ic.object_id and ind.index_id = ic.index_id 
-JOIN sys.columns col ON ic.object_id = col.object_id and ic.column_id = col.column_id 
-JOIN sys.tables t ON ind.object_id = t.object_id 
+FROM sys.indexes ind
+JOIN sys.index_columns ic ON  ind.object_id = ic.object_id and ind.index_id = ic.index_id
+JOIN sys.columns col ON ic.object_id = col.object_id and ic.column_id = col.column_id
+JOIN sys.tables t ON ind.object_id = t.object_id
 JOIN sys.schemas s ON t.schema_id = s.schema_id
 WHERE ind.name = @NAME
   AND ind.object_id = @ID
@@ -83,57 +85,63 @@ ORDER BY TableName
                             IsIncluded = Convert.ToBoolean(reader[11]),
                         });
                     }
-                    var buffer = new StringBuilder();
-                    buffer.AppendLine(@"DECLARE @Name nvarchar(128), @TableName nvarchar(128), @TableSchema nvarchar(128)");
-                    buffer.AppendFormat(
-                        @"SELECT @Name = N'{0}', @TableName=N'{1}', @TableSchema = N'{2}'",
-                        index.Name,
-                        index.Table.Name,
-                        index.Table.Schema);
-                    buffer.AppendLine();
-                    buffer.AppendLine(
-                        "IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID('[' + @TableSchema + '].[' + @TableName + ']') AND UPPER(name) = UPPER(@Name))");
-                    buffer.AppendLine(
-                        "    EXECUTE('DROP INDEX [' + @Name + '] ON [' + @TableSchema + '].[' + @TableName + ']')");
-                    buffer.AppendLine();
-                    buffer.AppendLine(@"PRINT 'Creating index [' + @Name + '] on table [' + @TableSchema + '].[' + @TableName + ']'");
-                    buffer.AppendLine("GO");
-                    buffer.AppendLine();
-                    buffer.Append(@"CREATE");
-                    if (index.IsUnique)
-                    {
-                        buffer.Append(" UNIQUE");
-                    }
-
-                    buffer.AppendFormat(" {0} INDEX [{1}]", index.Type, index.Name);
-                    buffer.AppendLine();
-                    buffer.AppendFormat("ON [{0}].[{1}]", index.Table.Schema, index.Table.Name);
-                    buffer.AppendFormat("({0})", string.Join(", ", index.Columns.Where(c => !c.IsIncluded).Select(
-                        c =>
-                        {
-                            if (c.IsDescending)
-                            {
-                                return c.Name + " DESC";
-                            }
-
-                            return c.Name;
-                        })));
-                    if (index.Columns.Any(c => c.IsIncluded))
-                    {
-                        buffer.AppendLine();
-                        buffer.AppendFormat("INCLUDE ({0})", string.Join(", ", index.Columns.Where(c => c.IsIncluded).Select(c => c.Name)));
-                    }
-
-                    if (index.HasFilter)
-                    {
-                        buffer.AppendLine();
-                        buffer.AppendFormat("WHERE {0}", index.FilterDefinition);
-                    }
-
-                    obj.Code += buffer.ToString();
-                    obj.AddCodeTemplate();
+                    GenerateCodeMsSql(obj, index);
                 }
             }
+        }
+
+        private static void GenerateCodeMsSql(SqlObject obj, SysIndex index)
+        {
+            var buffer = new StringBuilder();
+            buffer.AppendLine(@"DECLARE @Name nvarchar(128), @TableName nvarchar(128), @TableSchema nvarchar(128)");
+            buffer.AppendFormat(
+                @"SELECT @Name = N'{0}', @TableName=N'{1}', @TableSchema = N'{2}'",
+                index.Name,
+                index.Table.Name,
+                index.Table.Schema);
+            buffer.AppendLine();
+            buffer.AppendLine(
+                "IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID('[' + @TableSchema + '].[' + @TableName + ']') AND UPPER(name) = UPPER(@Name))");
+            buffer.AppendLine(
+                "    EXECUTE('DROP INDEX [' + @Name + '] ON [' + @TableSchema + '].[' + @TableName + ']')");
+            buffer.AppendLine();
+            buffer.AppendLine(@"PRINT 'Creating index [' + @Name + '] on table [' + @TableSchema + '].[' + @TableName + ']'");
+            buffer.AppendLine("GO");
+            buffer.AppendLine();
+            buffer.Append(@"CREATE");
+            if (index.IsUnique)
+            {
+                buffer.Append(" UNIQUE");
+            }
+
+            buffer.AppendFormat(" {0} INDEX [{1}]", index.Type, index.Name);
+            buffer.AppendLine();
+            buffer.AppendFormat("ON [{0}].[{1}]", index.Table.Schema, index.Table.Name);
+            buffer.AppendFormat("({0})", string.Join(", ", index.Columns.Where(c => !c.IsIncluded).Select(
+                c =>
+                {
+                    if (c.IsDescending)
+                    {
+                        return c.Name + " DESC";
+                    }
+
+                    return c.Name;
+                })));
+            if (index.Columns.Any(c => c.IsIncluded))
+            {
+                buffer.AppendLine();
+                buffer.AppendFormat("INCLUDE ({0})",
+                    string.Join(", ", index.Columns.Where(c => c.IsIncluded).Select(c => c.Name)));
+            }
+
+            if (index.HasFilter)
+            {
+                buffer.AppendLine();
+                buffer.AppendFormat("WHERE {0}", index.FilterDefinition);
+            }
+
+            obj.Code += buffer.ToString();
+            obj.AddCodeTemplate();
         }
 
         public override string NameSql
@@ -144,11 +152,11 @@ ORDER BY TableName
 ,s.name AS SchemaName
 ,ind.object_id AS ObjectId
 FROM sys.indexes ind
-JOIN sys.tables t ON ind.object_id = t.object_id 
+JOIN sys.tables t ON ind.object_id = t.object_id
 JOIN sys.schemas s ON t.schema_id = s.schema_id
 WHERE ind.index_id <> 0
-  AND ind.is_primary_key = 0 
-  AND ind.is_unique_constraint = 0 
+  AND ind.is_primary_key = 0
+  AND ind.is_unique_constraint = 0
   AND t.is_ms_shipped = 0";
             }
         }

@@ -1,28 +1,28 @@
-﻿using System;
+﻿using Powerup.Commandline.Options;
+using Powerup.Output;
+using System;
 using System.Configuration;
 using System.Linq;
-using Powerup.Commandline.Options;
-using Powerup.Output;
 
 namespace Powerup
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             if (ConfigurationManager.ConnectionStrings.Count == 0) return;
 
             var conn = new Configuration();
             var optionSet = ParseCommandLineOptions(conn);
-            
+
             try
             {
                 var app = new Application(conn);
 
                 optionSet.Parse(args);
-                if(!conn.IsValid)
+                if (!conn.Initialize())
                 {
-                    throw new OptionException("missing parameters","");
+                    throw new OptionException("missing parameters", "");
                 }
 
                 app.BuildEntities();
@@ -53,23 +53,26 @@ namespace Powerup
                      .Add("?|h|help", ShowHelp)
                      .Add("d=|database=",
                           "Specify the name of a database to use.",
-                          o => configuration.ConnectionStringBuilder.InitialCatalog = o)
+                          o => configuration.InitialCatalog = o)
                      .Add("s=|server=",
                           "Specify the name of a server to use.",
-                          o => configuration.ConnectionStringBuilder.DataSource = o)
+                          o => configuration.DataSource = o)
                      .Add("o=|output=",
                           "The location to write the generated files.",
                           o => configuration.OutputFolder = o)
                      .Add("t=|trusted=",
                           "Whether connection uses integrated security or not.",
-                          o => configuration.ConnectionStringBuilder.IntegratedSecurity = bool.Parse(o))
+                          o => configuration.IntegratedSecurity = bool.Parse(o))
                      .Add("u=|username=",
                           "Database username.",
-                          o => configuration.ConnectionStringBuilder.UserID = o)
+                          o => configuration.UserID = o)
                      .Add("p=|password=",
                           "Database password",
-                          o => configuration.ConnectionStringBuilder.Password = o);
-            
+                          o => configuration.Password = o)
+                     .Add("pn=|provider=",
+                          "Database provider (mssql, System.Data.SqlClient, mysql, MySql.Data.MySqlClient)",
+                          o => configuration.ProviderName = o);
+
             return optionSet;
         }
 
